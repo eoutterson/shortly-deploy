@@ -36,8 +36,8 @@ module.exports = function(grunt) {
       //
       dist:{
         files:{
-          'public/dist/app.min.js':'public/dist/built.js',
-          'public/dist/lib.min.js':'public/lib.js'
+          'public/dist/app.min.js':['public/dist/built.js'],
+          'public/dist/lib.min.js':['public/dist/lib.js']
         }
       }
     },
