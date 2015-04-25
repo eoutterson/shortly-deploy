@@ -3,8 +3,14 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['public/client/app.js', 'public/client/createLinkView.js', 'public/client/link.js', 'public/client/links.js', 'public/client/linksView.js', 'public/client/linkView.js', 'public/client/router.js'],
+        dest: 'public/dist/built.js',
+      },
     },
-
     mochaTest: {
       test: {
         options: {
@@ -21,12 +27,19 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      //options banner saying we uglified/minified our files
+      //dist something like 'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+      //
+      dist:{
+        files:{
+          'public/dist/app.min.js':['public/dist/built.js']
+        }
+      }
     },
 
     jshint: {
-      files: [
         // Add filespec list here
-      ],
+        files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*.js', 'app/**/*.js'],
       options: {
         force: 'true',
         jshintrc: '.jshintrc',
@@ -38,6 +51,15 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+      minify: {
+        files: [{
+          expand: true,
+          cwd: 'public/',
+          src: ['style.css'],
+          dest: 'public/dist/',
+          ext: '.css'
+        }]
+      }
     },
 
     watch: {
@@ -94,6 +116,12 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'jshint',
+    'mochaTest',
+    'concat',
+    'cssmin',
+    'uglify',
+    'nodemon'
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -106,6 +134,13 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
+    'jshint',
+    'mocha',
+    'concat',
+    'uglify',
+    'cssmin',
+    'nodemon',
+    'watch'
   ]);
 
 
