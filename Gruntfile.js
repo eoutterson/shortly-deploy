@@ -10,6 +10,10 @@ module.exports = function(grunt) {
         src: ['public/client/app.js', 'public/client/createLinkView.js', 'public/client/link.js', 'public/client/links.js', 'public/client/linksView.js', 'public/client/linkView.js', 'public/client/router.js'],
         dest: 'public/dist/built.js',
       },
+      lib: {
+        src: ['public/lib/underscore.js', 'public/lib/jquery.js', 'public/lib/handlebars.js', 'public/lib/backbone.js'],
+        dest: 'public/dist/lib.js',
+      }
     },
     mochaTest: {
       test: {
@@ -32,7 +36,8 @@ module.exports = function(grunt) {
       //
       dist:{
         files:{
-          'public/dist/app.min.js':['public/dist/built.js']
+          'public/dist/app.min.js':['public/dist/built.js'],
+          'public/dist/lib.min.js':['public/lib.js']
         }
       }
     },
@@ -118,7 +123,8 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'jshint',
     'mochaTest',
-    'concat',
+    'concat:dist',
+    'concat:lib',
     'cssmin',
     'uglify',
     'nodemon'
